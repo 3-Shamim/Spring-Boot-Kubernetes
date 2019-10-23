@@ -1,0 +1,37 @@
+version: "3.3"
+
+services:
+#  mysql:
+#    image: mysql:latest
+#    volumes:
+#      - /data/mysql:/var/lib/mysql
+#    environment:
+#      - "MYSQL_ROOT_PASSWORD=root"
+#      - "MYSQL_DATABASE=student_service"
+#      - "MYSQL_USER=demo"
+#      - "MYSQL_PASSWORD=123"
+#    ports:
+#      - "3306"
+#    networks:
+#      - db-net
+  app_service:
+    container_name: student-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - "SERVER_PORT=8080"
+      - "SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/student_service?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true"
+      - "SPRING_DATASOURCE_USERNAME=demo"
+      - "SPRING_DATASOURCE_PASSWORD=123"
+    ports:
+      - "8081:8080"
+    networks:
+      - dockermysql_mysql-net
+#    restart: always
+#    network_mode: "host"
+#    depends_on:
+#      - mysql
+networks:
+  dockermysql_mysql-net:
+    external: true
